@@ -14,6 +14,8 @@ import {
   Activity, Circle
 } from "lucide-react";
 import Sidebar from "@/app/components/Sidebar";
+import { useTheme } from "next-themes";
+
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -21,14 +23,16 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
+  // const [darkMode, setDarkMode] = useState(true);
   const [xandPrice, setXandPrice] = useState<string | null>(null);
-  // Save theme to localStorage when it changes
-  const toggleTheme = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("theme", newMode ? "dark" : "light");
-  };
+  const { theme, setTheme } = useTheme();
+  const darkMode = theme === "dark";
+  // Save colorTheme to localStorage when it changes
+  // const toggleTheme = () => {
+  //   const newMode = !darkMode;
+  //   setDarkMode(newMode);
+  //   localStorage.setItem("colorTheme", newMode ? "dark" : "light");
+  // };
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -48,7 +52,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     return () => clearInterval(interval);
   }, []);
 
-  const theme = {
+  const colorTheme = {
     bg: darkMode ? "bg-black" : "bg-white",
     textMuted: darkMode ? "text-zinc-500" : "text-gray-500",
     textSecondary: darkMode ? "text-zinc-400" : "text-gray-600",
@@ -96,7 +100,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       </div>
 
       <div
-        className={`flex min-h-screen  font-geist ${theme.bg} relative overflow-hidden transition-colors duration-300`}>
+        className={`flex min-h-screen  font-geist ${colorTheme.bg} relative overflow-hidden transition-colors duration-300`}>
 
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
 
@@ -124,15 +128,15 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <Sidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
-          darkMode={darkMode}
-          toggleTheme={toggleTheme}
+          // darkMode={darkMode}
+          // toggleTheme={toggleTheme}
         />
 
         <div className="flex-1 flex flex-col min-w-0 relative z-10">
           {/* Top bar with only mobile menu button and title */}
-          <div className="h-16 px-6 md:hidden flex items-center justify-between ${theme.border} ${theme.navBg} backdrop-blur-xl">
+          <div className="h-16 px-6 md:hidden flex items-center justify-between ${colorTheme.border} ${colorTheme.navBg} backdrop-blur-xl">
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden">
-              <Menu size={24} className={theme.textSecondary} />
+              <Menu size={24} className={colorTheme.textSecondary} />
             </button>
 
           </div>

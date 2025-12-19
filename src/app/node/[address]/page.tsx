@@ -30,6 +30,8 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { useTheme } from "next-themes";
+
 
 interface NodeStats {
   active_streams: number;
@@ -77,6 +79,9 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
   const [p95, setP95] = useState<number>(0);
   const [threshold, setThreshold] = useState<number>(0);
   const [totalPodsWithCredits, setTotalPodsWitCredits] = useState<number>(0);
+
+  const { theme, setTheme } = useTheme();
+  const darkMode = theme === "dark";
 
   const fetchData = async () => {
     try {
@@ -148,7 +153,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center min-h-screen bg-transparent">
         <div className="relative">
           <div className="w-16 h-16 border-4 border-zinc-800 border-t-cyan-400 rounded-full animate-spin"></div>
           <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-purple-400 rounded-full animate-spin" style={{ animationDirection: "reverse", animationDuration: "1s" }}></div>
@@ -213,7 +218,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
 
   return (
-    <div className="relative z-10 p-6 md:p-8 space-y-6">
+    <div className={`relative z-10 p-6 md:p-8 space-y-6 ${darkMode ? "text-white" : "text-black"}`}>
       {/* Node Header */}
       <div className=" backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-zinc-800/50">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -232,11 +237,11 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
                     {healthStatus.label}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
+                <div className="flex items-center gap-2 text-sm colorTheme">
                   <Clock size={14} />
                   <span>Last Seen: {formatLastSeen(podData.last_seen_timestamp)}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
+                <div className="flex items-center gap-2 text-sm colorTheme">
                   <span>Version: {podData.version}</span>
                 </div>
 
@@ -268,10 +273,10 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
                 <Cpu size={24} className="" />
               </div>
-              <span className="text-sm font-medium text-zinc-400">CPU</span>
+              <span className="text-sm font-medium colorTheme">CPU</span>
             </div>
             <span className="text-3xl font-bold font-space-grotesk">
-              {cpuPercent.toFixed(1)}<span className="text-lg text-zinc-500">%</span>
+              {cpuPercent.toFixed(1)}<span className="text-lg colorTheme">%</span>
             </span>
           </div>
           <div className="w-full bg-gray-700/50 rounded-full h-2.5">
@@ -289,10 +294,10 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
                 <RamIcon size={24} className="" />
               </div>
-              <span className="text-sm font-medium text-zinc-400">RAM</span>
+              <span className="text-sm font-medium colorTheme">RAM</span>
             </div>
             <span className="text-3xl font-bold font-space-grotesk">
-              {ramPercent}<span className="text-lg text-zinc-500">%</span>
+              {ramPercent}<span className="text-lg colorTheme">%</span>
             </span>
           </div>
           <div className="w-full bg-gray-700/50 rounded-full h-2.5">
@@ -301,7 +306,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               backgroundColor: Number(ramPercent) > 80 ? "#ef4444" : Number(ramPercent) > 60 ? "#f59e0b" : ""
             }}></div>
           </div>
-          <p className="text-sm text-zinc-500 mt-3">
+          <p className="text-sm colorTheme mt-3">
             {stats ? `${(stats.ram_used / 1e9).toFixed(1)} GB / ${(stats.ram_total / 1e9).toFixed(0)} GB` : "N/A"}
           </p>
         </div>
@@ -313,13 +318,13 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <div className="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center">
                 <HardDrive size={24} className="" />
               </div>
-              <span className="text-sm font-medium text-zinc-400">Storage</span>
+              <span className="text-sm font-medium colorTheme">Storage</span>
             </div>
             <span className="text-3xl font-bold font-space-grotesk">
               {storageUsedGB} GB
             </span>
           </div>
-          <p className="text-sm text-zinc-500 mt-3">
+          <p className="text-sm colorTheme mt-3">
             Committed: {storageCommittedGB} GB ({storagePercent}% used)
           </p>
         </div>
@@ -331,13 +336,13 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
                 <Clock size={24} className="" />
               </div>
-              <span className="text-sm font-medium text-zinc-400">Uptime</span>
+              <span className="text-sm font-medium colorTheme">Uptime</span>
             </div>
             <span className="text-3xl font-bold font-space-grotesk">
-              {uptimeDays}<span className="text-lg text-zinc-500">d</span>
+              {uptimeDays}<span className="text-lg colorTheme">d</span>
             </span>
           </div>
-          <p className="text-sm text-zinc-500 mt-3">
+          <p className="text-sm colorTheme mt-3">
             {uptimeDays} days, {uptimeHours} hours
           </p>
         </div>
@@ -353,53 +358,41 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
           <div className="text-center p-6  rounded-xl border border-zinc-800/50 backdrop-blur-xl">
             <div className="flex items-center justify-center gap-2 mb-3">
               <TrendingDown size={18} className="" />
-              <span className="text-sm text-zinc-400 font-medium">Received</span>
+              <span className="text-sm colorTheme font-medium">Received</span>
             </div>
             <p className="text-4xl font-bold font-space-grotesk ">
               {stats ? stats.packets_received.toLocaleString() : "N/A"}
             </p>
-            <p className="text-sm text-zinc-500 mt-2">packets</p>
+            <p className="text-sm colorTheme mt-2">packets</p>
           </div>
           <div className="text-center p-6  rounded-xl border border-zinc-800/50 backdrop-blur-xl">
             <div className="flex items-center justify-center gap-2 mb-3">
               <TrendingUp size={18} className="" />
-              <span className="text-sm text-zinc-400 font-medium">Sent</span>
+              <span className="text-sm colorTheme font-medium">Sent</span>
             </div>
             <p className="text-4xl font-bold font-space-grotesk ">
               {stats ? stats.packets_sent.toLocaleString() : "N/A"}
             </p>
-            <p className="text-sm text-zinc-500 mt-2">packets</p>
+            <p className="text-sm colorTheme mt-2">packets</p>
           </div>
           <div className="text-center p-6  rounded-xl border border-zinc-800/50 backdrop-blur-xl">
             <div className="flex items-center justify-center gap-2 mb-3">
               <Activity size={18} className="" />
-              <span className="text-sm text-zinc-400 font-medium">Active Streams</span>
+              <span className="text-sm colorTheme font-medium">Active Streams</span>
             </div>
             <p className="text-4xl font-bold font-space-grotesk ">
               {stats ? stats.active_streams : "N/A"}
             </p>
-            <p className="text-sm text-zinc-500 mt-2">connections</p>
+            <p className="text-sm colorTheme mt-2">connections</p>
           </div>
         </div>
       </div>
 
       {/* Pubkey & Additional Info */}
       <div className=" backdrop-blur-xl w-1/2 rounded-2xl p-6 border border-zinc-800/50">
-        <h2 className="text-2xl font-bold font-space-grotesk mb-6">
-          Public Key: <span className="text-2xl md:text-2xl tracking-wider font-bold font-space-grotesk mb-3 font-mono break-all">{podData.pubkey}</span>
+        <h2 className="text-2xl font-bold font-space-grotesk ">
+          <span className="text-zinc-500">Public Key:</span> <span className="text-2xl md:text-2xl tracking-wider font-bold font-space-grotesk mb-3 font-mono break-all">{podData.pubkey}</span>
         </h2>
-        <div className="space-y-4">
-          <div>
-
-            {/* <p className="font-mono text-2xl break-all">{podData.pubkey}</p> */}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* <div>
-                <p className="text-sm text-zinc-400 mb-1">Visibility</p>
-                <p className="font-mono">{podData.is_public ? "Public" : "Private"}</p>
-              </div> */}
-          </div>
-        </div>
       </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -434,29 +427,29 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
           </h2>
           <div className="space-y-4">
             <div className="flex justify-between">
-              <span className="text-zinc-400">Your Credits</span>
+              <span className="colorTheme">Your Credits</span>
               <span className="font-bold text-2xl">{credits !== null ? credits.toLocaleString() : "N/A"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-zinc-400">Top Earner</span>
+              <span className="colorTheme">Top Earner</span>
               <span className="font-bold">{topEarner.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-zinc-400">95th Percentile</span>
+              <span className="colorTheme">95th Percentile</span>
               <span className="font-bold">{p95.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-zinc-400">Threshold (80% of P95)</span>
+              <span className="colorTheme">Threshold (80% of P95)</span>
               <span className="font-bold">{threshold.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-zinc-400">Eligible for DevNet</span>
+              <span className="colorTheme">Eligible for DevNet</span>
               <span className="font-bold text-cyan-400">
                 TBD
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-zinc-400">Total Pods</span>
+              <span className="colorTheme">Total Pods</span>
               <span className="font-bold">{totalPodsWithCredits}</span>
             </div>
           </div>

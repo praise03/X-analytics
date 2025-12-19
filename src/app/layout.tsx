@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Montserrat } from "next/font/google";
 import "./globals.css";
 import AppLayout from "@/app/components/AppLayout";
+import { Providers } from "@/app/components/ThemeProvider";
+import { Inter } from "next/font/google";
+import { Inconsolata } from "next/font/google"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
-const montserrat = Montserrat({
+const inconsolata = Inconsolata({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-montserrat",
-  display: "swap",
+  variable: "--font-inconsolata",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -40,9 +37,11 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={` ${montserrat.variable} antialiased`}
+        className={` ${inconsolata.variable} antialiased`}
       >
-        <AppLayout>{children}</AppLayout>
+        <Providers>
+          <AppLayout>{children}</AppLayout>
+        </Providers>
       </body>
     </html>
   );

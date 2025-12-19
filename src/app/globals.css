@@ -1,14 +1,16 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-sans: var(--font-inter);
+
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -16,6 +18,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+      font-family: var(--font-sans), system-ui, sans-serif;
   }
 }
 
@@ -24,4 +27,39 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+ */
 
+ @import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+
+  --font-new: var(--font-inconsolata);
+}
+
+/* Tailwind v4 theme tokens */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+
+  --font-new: var(--font-inconsolata);
+}
+
+/* NEXT-THEMES handles dark mode via .dark */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* ✅ THIS IS THE KEY LINE YOU WERE MISSING */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inconsolata), system-ui, sans-serif;
+}
