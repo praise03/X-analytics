@@ -161,7 +161,7 @@ export default function PNodesPage() {
   };
 
   return (
-    <div className="relative z-10 p-8">
+    <div className="relative z-10 p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
         <div>
           <h1 className={`text-4xl font-bold font-space-grotesk bg-gradient-to-r from-white to-zinc-400 bg-clip-text ${colorTheme.textCard}`}>

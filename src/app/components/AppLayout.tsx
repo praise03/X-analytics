@@ -102,7 +102,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <div
         className={`flex min-h-screen  font-geist ${colorTheme.bg} relative overflow-hidden transition-colors duration-300`}>
 
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="fixed opacity-0 inset-0 pointer-events-none overflow-hidden">
 
           <div
             className={`absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-3xl ${darkMode ? "bg-cyan-500/10" : "bg-cyan-400/20"} animate-pulse`}
@@ -144,7 +144,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
 
           {/* Main content */}
-          <main className="flex-1 p-8 pt-0 overflow-auto">
+          <main className="flex-1 p-4 pt-0 overflow-auto">
             {children}
           </main>
         </div>

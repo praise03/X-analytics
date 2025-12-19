@@ -28,11 +28,11 @@ import {
   Bar,
   Legend,
 } from "recharts";
-import Sidebar from "@/app/components/Sidebar";
 import NodeGlobe from "@/app/components/Globe";
-import { json } from "stream/consumers";
 import { podsToCountry } from "@/app/data/podToCountries";
-import { start } from "repl";
+import { useTheme } from "next-themes";
+
+
 
 
 interface StatusCounts {
@@ -68,9 +68,10 @@ interface AggregatedStats {
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [autoRefresh, setAutoRefresh] = useState<boolean>(false);
-  const [darkMode, setDarkMode] = useState<boolean>(true);
   const [podsWithStats, setPodsWithStats] = useState<PodWithStats[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { theme, setTheme } = useTheme();
+  const darkMode = theme === "dark";
   // Add this state with your others
   const [aggregatedStats, setAggregatedStats] = useState({
     totalNodes: 0,
@@ -208,20 +209,6 @@ export default function Dashboard() {
   }, [autoRefresh]);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setDarkMode(savedTheme === "dark");
-    }
-  }, []);
-
-  // Save theme to localStorage when it changes
-  const toggleTheme = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("theme", newMode ? "dark" : "light");
-  };
-
-  useEffect(() => {
     fetchPodsWithStats();
   }, []);
 
@@ -234,13 +221,13 @@ export default function Dashboard() {
 
 
 
-  const theme = {
+  const colorTheme = {
     bg: darkMode ? "bg-[#0a0a0a]" : "bg-[#f5f5f7]",
     text: darkMode ? "" : "text-gray-900",
-    textMuted: darkMode ? "" : "text-gray-500",
+    textMuted: darkMode ? "" : "text-black",
     textSecondary: darkMode ? "" : "text-black",
-    border: darkMode ? "border-zinc-600/50" : "border-gray-200",
-    cardBg: darkMode ? "" : "",
+    border: darkMode ? "border-zinc-600/50" : "border-gray-900",
+    cardBg: darkMode ? "bg-transparent" : "bg-zinc-200/30",
     sidebarBg: darkMode ? "bg-black/40" : "bg-white/80",
     navBg: darkMode ? "bg-black/20" : "bg-white/70",
     inputBg: darkMode ? "bg-zinc-900/50" : "bg-gray-100/80",
@@ -249,7 +236,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex-1 md:p-12 flex flex-col min-w-0 relative z-10">
+    <div className="flex-1 md:p-4 flex flex-col min-w-0 relative z-10">
       {/* Top Application Bar */}
 
 
@@ -258,21 +245,21 @@ export default function Dashboard() {
         {/* Top Row: Big Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Total Nodes */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-md p-6 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-cyan-500/20 to-transparent"></div>
             <div className="relative z-10">
               <Server size={28} className=" mb-3" />
-              <p className={`text-sm ${theme.textMuted}`}>Total pNodes</p>
+              <p className={`text-sm ${colorTheme.textMuted}`}>Total pNodes</p>
               <p className="text-4xl font-bold mt-2">{aggregatedStats.totalNodes}</p>
             </div>
           </div>
 
           {/* Online Nodes */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-md p-6 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-green-500/20 to-transparent"></div>
             <div className="relative z-10">
               <Activity size={28} className=" mb-3 animate-pulse" />
-              <p className={`text-sm ${theme.textMuted}`}>Online</p>
+              <p className={`text-sm ${colorTheme.textMuted}`}>Online</p>
               <p className="text-4xl font-bold mt-2">{aggregatedStats.onlineNodes}</p>
               <p className="text-xs  mt-1">
                 {aggregatedStats.totalNodes > 0
@@ -283,46 +270,46 @@ export default function Dashboard() {
           </div>
 
           {/* Committed Storage */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-xl rounded-md p-6 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-purple-500/20 to-transparent"></div>
             <div className="relative z-10">
               <Database size={28} className=" mb-3" />
-              <p className={`text-sm ${theme.textMuted}`}>Committed Storage</p>
+              <p className={`text-sm ${colorTheme.textMuted}`}>Committed Storage</p>
               <p className="text-4xl font-bold mt-2">{aggregatedStats.totalStorageCommittedTB} TB</p>
             </div>
           </div>
 
           {/* Average Uptime */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-md p-6 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-amber-500/20 to-transparent"></div>
             <div className="relative z-10">
               <Clock size={28} className=" mb-3" />
-              <p className={`text-sm ${theme.textMuted}`}>Avg Uptime</p>
+              <p className={`text-sm ${colorTheme.textMuted}`}>Avg Uptime</p>
               <p className="text-4xl font-bold mt-2">{aggregatedStats.averageUptimeDays} days</p>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <div className={`${theme.statBg} d-xl p-4 ${theme.border} border backdrop-blur-xl text-center`}>
-            <p className={`text-xs ${theme.textMuted} mb-1`}>Used Storage</p>
+          <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
+            <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Used Storage</p>
             <p className="text-xl font-bold ">
               {aggregatedStats.totalStorageUsedGB} GB
             </p>
           </div>
-          <div className={`${theme.statBg} d-xl p-4 ${theme.border} border backdrop-blur-xl text-center`}>
-            <p className={`text-xs ${theme.textMuted} mb-1`}>Avg Usage</p>
+          <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
+            <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Avg Usage</p>
             <p className="text-xl font-bold ">
               {(aggregatedStats.averageStorageUsagePercent * 100).toFixed(2)}%
             </p>
           </div>
-          <div className={`${theme.statBg} d-xl p-4 ${theme.border} border backdrop-blur-xl text-center`}>
-            <p className={`text-xs ${theme.textMuted} mb-1`}>Public Nodes</p>
+          <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
+            <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Public Nodes</p>
             <p className="text-xl font-bold ">{aggregatedStats.publicNodes}</p>
           </div>
-          <div className={`${theme.statBg} d-xl p-4 ${theme.border} border backdrop-blur-xl text-center`}>
-            <p className={`text-xs ${theme.textMuted} mb-1`}>Versions</p>
-            <p className="text-xl font-bold ${theme.text}">
+          <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
+            <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Versions</p>
+            <p className="text-xl font-bold ${colorTheme.text}">
               {Object.keys(aggregatedStats.versionDistribution).length}
             </p>
           </div>
@@ -332,7 +319,7 @@ export default function Dashboard() {
         {/* Modern Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
           {/* 1. Online Nodes – Animated Donut with Glow */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent blur-xl"></div>
             <div className="relative z-10">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
@@ -408,7 +395,7 @@ export default function Dashboard() {
           </div>
 
           {/* 2. Public vs Private – Animated Pie */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0  bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-xl"></div>
             <div className="relative z-10">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
@@ -459,7 +446,7 @@ export default function Dashboard() {
 
           {/* 3. Storage – Animated Gradient Area */}
           {/* Storage Used vs Committed – Stacked Horizontal Bar */}
-          <div className={`relative ${theme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${theme.border} border overflow-hidden`}>
+          <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-30 bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-xl"></div>
             <div className="relative z-10">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
@@ -494,14 +481,14 @@ export default function Dashboard() {
               <div className="flex justify-center gap-8 mt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-4 h-4 bg-[#8b5cf6] rounded"></div>
-                  <span className={`text-sm ${theme.textSecondary}`}>Committed: {aggregatedStats.totalStorageCommittedTB} TB</span>
+                  <span className={`text-sm ${colorTheme.textSecondary}`}>Committed: {aggregatedStats.totalStorageCommittedTB} TB</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-4 h-4 bg-[#ec4899] rounded"></div>
-                  <span className={`text-sm ${theme.textSecondary}`}>Used: {aggregatedStats.totalStorageUsedGB} GB</span>
+                  <span className={`text-sm ${colorTheme.textSecondary}`}>Used: {aggregatedStats.totalStorageUsedGB} GB</span>
                 </div>
               </div>
-              <p className={`text-center text-sm ${theme.textMuted} mt-4`}>
+              <p className={`text-center text-sm ${colorTheme.textMuted} mt-4`}>
                 Only {(aggregatedStats.totalStorageUsedGB / (aggregatedStats.totalStorageCommittedTB * 1000) * 100).toFixed(2)}% of committed storage currently used
               </p>
             </div>
@@ -509,14 +496,10 @@ export default function Dashboard() {
 
           {/* Geolocation Control */}
           <div className="mb-8">
-            {/* <h3 className="text-xl font-bold mb-4">Geographical Distribution</h3> */}
             {!geoComplete ? (
               <span>Loading...</span>
             ) : (
               <div className="16">
-                {/* <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-orange-400 to-cyan-400 bg-clip-text text-transparent">
-                Global pNode Distribution
-              </h2> */}
                 <NodeGlobe countryDistribution={countryDistribution} />
 
               </div>

@@ -218,7 +218,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
 
   return (
-    <div className={`relative z-10 p-6 md:p-8 space-y-6 ${darkMode ? "text-white" : "text-black"}`}>
+    <div className={`relative z-10 p-6 md:p-6 space-y-6 ${darkMode ? "text-white" : "text-black"}`}>
       {/* Node Header */}
       <div className=" backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-zinc-800/50">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
