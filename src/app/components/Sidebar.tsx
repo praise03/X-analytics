@@ -37,10 +37,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[260px] ${colorTheme.sidebarBg} backdrop-blur-xl ${colorTheme.border} border-r border-r-1 transform transition-all duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
+    <aside className={`fixed md:static inset-y-0 left-0 z-50 w-1/7 ${colorTheme.sidebarBg} backdrop-blur-xl ${colorTheme.border} border-r border-r-1 transform transition-all duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={`flex items-center gap-3 py-6 px-6 ${darkMode ? "" : "bg-teal-800"}`}>
+        <div className={`flex items-center gap-3 py-6 px-6 ${darkMode ? "" : "bg-[#b0c4de]"}`}>
           <div className=" h-9 d-xlflex items-center justify-center">
             <img src="/logo_edited.avif" alt="" />
           </div>
@@ -52,12 +52,12 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
         </div>
 
         {/* Navigation */}
-        <div className="px-4 ">
+        <div className="px-4 mt-1 ">
           <Link
               href="//"
               className={`w-full flex items-center gap-3 py-4 px-4 d-xl transition ${
                 pathname === "/"
-                  ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-black border border-cyan-500/20 font-medium"
+                  ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10  border border-cyan-500/20 font-medium"
                   : `${colorTheme.hoverBg} ${colorTheme.textSecondary} `
               }`}
             >
@@ -79,7 +79,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               href="/about"
               className={`w-full flex items-center gap-3 py-4 px-4 mt-2  d-xl transition ${
                 pathname === "/about"
-                  ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-black border border-cyan-500/20 font-medium"
+                  ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10  border border-cyan-500/20 font-medium"
                   : `${colorTheme.hoverBg} ${colorTheme.textSecondary} `
               }`}
             >

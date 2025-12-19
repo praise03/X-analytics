@@ -149,18 +149,18 @@ export default function AppLayout({ children }: AppLayoutProps) {
           </main>
         </div>
 
-        <footer style={{ justifySelf: "anchor-center" }} className="fixed p-6 inset-x-0 bottom-0 h-16 bg-black/90 backdrop-blur-xl border border-zinc-100/50 z-50 flex">
+        <footer style={{ justifySelf: "anchor-center" }} className="fixed inset-x-0 bottom-0 h-12 bg-black/90 backdrop-blur-xl border-t border-r border-l border-zinc-100/50 z-50 flex">
           <div className="w-full max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
             <div className="flex items-center gap-6 ">
               <div className="flex items-center gap-2">
-                <span>1 XAND →</span>
+                <span className="text-white">1 XAND →</span>
                 <span className="text-green-400 font-medium">{xandPrice} USDT</span>
               </div>
               <a
                 href="https://www.coingecko.com/en/coins/xandeum"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2 bg-orange-500 hover:bg-orange-400 font-medium rounded-lg transition shadow-lg shadow-orange-500/20"
+                className="px-6 py-2 bg-orange-500 hover:bg-orange-400 font-medium rounded-md transition shadow-lg shadow-orange-500/20"
               >
                 Buy XAND
               </a>
@@ -171,7 +171,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <a href="https://docs.xandeum.network" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
                 Docs
               </a>
-              <a href="https://discord.gg/xandeum" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+              <a href="https://discord.com/invite/mGAxAuwnR9" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
                 Discord
               </a>
               <span>Powered by Xandeum</span>
