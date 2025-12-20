@@ -11,7 +11,6 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -22,13 +21,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const { theme, setTheme } = useTheme();
   const darkMode = theme === "dark";
 
-  const [mounted, setMounted] = useState(false);
 
   const pathname = usePathname();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const colorTheme = {
     sidebarBg: darkMode ? "bg-black" : "bg-white",
@@ -104,7 +98,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             </Link>
           </div>
           
-          {mounted ? (
           <div className=" py-3">
             <button
               onClick={() => setTheme(darkMode ? "light" : "dark")}
@@ -115,7 +108,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 {darkMode ? "Light Mode" : "Dark Mode"}
               </span>
             </button>
-          </div> ) : null}
+          </div>
 
 
         </nav>
