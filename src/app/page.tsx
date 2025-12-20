@@ -250,7 +250,7 @@ export default function Dashboard() {
             <div className="relative z-10">
               <Server size={28} className=" mb-3" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Total pNodes</p>
-              <p className="text-4xl font-bold mt-2">{aggregatedStats.totalNodes}</p>
+              <p className="text-lg font-bold mt-2">{aggregatedStats.totalNodes}</p>
             </div>
           </div>
 
@@ -260,7 +260,7 @@ export default function Dashboard() {
             <div className="relative z-10">
               <Activity size={28} className=" mb-3 animate-pulse" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Online</p>
-              <p className="text-4xl font-bold mt-2">{aggregatedStats.onlineNodes}</p>
+              <p className="text-lg font-bold mt-2">{aggregatedStats.onlineNodes}</p>
               <p className="text-xs  mt-1">
                 {aggregatedStats.totalNodes > 0
                   ? ((aggregatedStats.onlineNodes / aggregatedStats.totalNodes) * 100).toFixed(1)
@@ -275,7 +275,7 @@ export default function Dashboard() {
             <div className="relative z-10">
               <Database size={28} className=" mb-3" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Committed Storage</p>
-              <p className="text-4xl font-bold mt-2">{aggregatedStats.totalStorageCommittedTB} TB</p>
+              <p className="text-lg font-bold mt-2">{aggregatedStats.totalStorageCommittedTB} TB</p>
             </div>
           </div>
 
@@ -285,7 +285,7 @@ export default function Dashboard() {
             <div className="relative z-10">
               <Clock size={28} className=" mb-3" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Avg Uptime</p>
-              <p className="text-4xl font-bold mt-2">{aggregatedStats.averageUptimeDays} days</p>
+              <p className="text-lg font-bold mt-2">{aggregatedStats.averageUptimeDays} days</p>
             </div>
           </div>
         </div>
@@ -293,23 +293,23 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
             <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Used Storage</p>
-            <p className="text-xl font-bold ">
+            <p className="text-lg font-bold ">
               {aggregatedStats.totalStorageUsedGB} GB
             </p>
           </div>
           <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
             <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Avg Storage Usage</p>
-            <p className="text-xl font-bold ">
+            <p className="text-lg font-bold ">
               {(aggregatedStats.averageStorageUsagePercent).toFixed(2)}%
             </p>
           </div>
           <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
             <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Public Nodes</p>
-            <p className="text-xl font-bold ">{aggregatedStats.publicNodes}</p>
+            <p className="text-lg font-bold ">{aggregatedStats.publicNodes}</p>
           </div>
           <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
             <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Versions</p>
-            <p className="text-xl font-bold ${colorTheme.text}">
+            <p className="text-lg font-bold ${colorTheme.text}">
               {Object.keys(aggregatedStats.versionDistribution).length}
             </p>
           </div>
@@ -322,7 +322,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent blur-xl"></div>
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-3">
                 <Activity size={24} className="text-cyan-400 animate-pulse" />
                 Network Health
               </h3>
@@ -369,7 +369,7 @@ export default function Dashboard() {
                   </Pie> */}
 
                   {/* Custom label styling */}
-                  <text x="50%" y="45%" textAnchor="middle" className="text-5xl font-bold fill-current">
+                  <text x="50%" y="45%" textAnchor="middle" className="text-3xl font-bold fill-current">
                     {aggregatedStats.onlineNodes}
                   </text>
                   <text x="50%" y="55%" textAnchor="middle" className={`text-lg fill-current`}>
@@ -398,7 +398,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0  bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-xl"></div>
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-3">
                 <Network size={24} className="text-purple-400" />
                 Node Visibility
               </h3>
@@ -423,10 +423,10 @@ export default function Dashboard() {
                     <Cell fill="#eee" />
                     <Cell fill="black" />
                   </Pie>
-                  <text x="50%" y="45%" textAnchor="middle" className="text-4xl font-bold fill-current">
+                  <text x="50%" y="45%" textAnchor="middle" className="text-2xl font-bold fill-current">
                     {aggregatedStats.publicNodes}
                   </text>
-                  <text x="50%" y="55%" textAnchor="middle" className="text-lg fill-current">
+                  <text x="50%" y="55%" textAnchor="middle" className="text-2xl fill-current">
                     of {aggregatedStats.totalNodes}
                   </text>
                   {/* <text x="50%" y="65%" textAnchor="middle" className="text-sm fill-cyan-400">
@@ -449,7 +449,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-8 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-30 bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-xl"></div>
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-3">
                 <Database size={24} className="text-purple-400" />
                 Storage Utilization
               </h3>
