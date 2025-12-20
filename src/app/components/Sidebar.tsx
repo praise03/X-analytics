@@ -150,10 +150,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   };
 
   return (
-    <aside className={`fixed md:static inset-y-0 left-0 z-50 w-64 ${darkMode ? "bg-black" : "bg-white"} backdrop-blur-xl border-r border-zinc-800/50 dark:border-gray-700 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
+    <aside className={`fixed md:static inset-y-0 left-0 z-50 w-56 ${darkMode ? "bg-black" : "bg-white"} backdrop-blur-xl border-r border-zinc-800/50 dark:border-gray-700 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={`flex items-center gap-3 py-6 px-6 ${darkMode ? "" : "bg-[#b0c4de]"}`}>
+        <div className={`flex items-center gap-3 py-6 px-6 ${darkMode ? "" : "bg-black"}`}>
           <div className=" h-9 d-xlflex items-center justify-center">
             <img src="/logo_edited.avif" alt="" />
           </div>
@@ -168,7 +168,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           <div className="space-y-1">
             <Link
               href="/"
-              className={`w-full flex items-center gap-3 py-4 px-4 rounded-xl transition ${pathname === "/"
+              className={`w-full flex items-center gap-3 text-xs py-3 px-4 rounded-xl transition ${pathname === "/"
                   ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 font-medium"
                   : "hover:bg-zinc-800/50 dark:hover:bg-gray-100 text-zinc-400 dark:text-gray-600"
                 }`}
@@ -180,7 +180,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
             <Link
               href="/pnodes"
-              className={`w-full flex items-center gap-3 py-4 px-4 rounded-xl transition ${pathname === "/pnodes"
+              className={`w-full flex items-center gap-3 text-xs py-3 px-4 rounded-xl transition ${pathname === "/pnodes"
                   ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 font-medium"
                   : "hover:bg-zinc-800/50 dark:hover:bg-gray-100 text-zinc-400 dark:text-gray-600"
                 }`}
@@ -192,7 +192,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
             <Link
               href="/about"
-              className={`w-full flex items-center gap-3 py-4 px-4 rounded-xl transition ${pathname === "/about"
+              className={`w-full flex items-center gap-3 text-xs py-3 px-4 rounded-xl transition ${pathname === "/about"
                   ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 font-medium"
                   : "hover:bg-zinc-800/50 dark:hover:bg-gray-100 text-zinc-400 dark:text-gray-600"
                 }`}
@@ -204,7 +204,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
             <Link
               href="/leaderboard"
-              className={`w-full flex items-center gap-3 py-4 px-4 rounded-xl transition ${pathname === "/leaderboard"
+              className={`w-full flex items-center gap-3 text-xs py-3 px-4 rounded-xl transition ${pathname === "/leaderboard"
                   ? "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 font-medium"
                   : "hover:bg-zinc-800/50 dark:hover:bg-gray-100 text-zinc-400 dark:text-gray-600"
                 }`}
@@ -215,10 +215,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             </Link>
           </div>
 
-          <div className=" py-4">
+          <div className=" py-3">
             <button
               onClick={() => setTheme(darkMode ? "light" : "dark")}
-              className={`w-full cursor-pointer flex gap-3 py-4 px-4 d-xl rounded-sm ${colorTheme.hoverBg} ${colorTheme.textSecondary} hover:text-current transition`}
+              className={`w-full cursor-pointer flex gap-3 py-3 px-4 d-xl rounded-sm ${colorTheme.hoverBg} ${colorTheme.textSecondary} hover:text-current transition`}
             >
               {darkMode ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-indigo-500" />}
               <span className="text-sm font-medium">

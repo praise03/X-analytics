@@ -298,9 +298,9 @@ export default function Dashboard() {
             </p>
           </div>
           <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>
-            <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Avg Usage</p>
+            <p className={`text-xs ${colorTheme.textMuted} mb-1`}>Avg Storage Usage</p>
             <p className="text-xl font-bold ">
-              {(aggregatedStats.averageStorageUsagePercent * 100).toFixed(2)}%
+              {(aggregatedStats.averageStorageUsagePercent).toFixed(2)}%
             </p>
           </div>
           <div className={`${colorTheme.statBg} d-xl p-4 ${colorTheme.border} border backdrop-blur-xl text-center`}>

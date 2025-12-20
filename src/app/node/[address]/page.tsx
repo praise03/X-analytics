@@ -15,20 +15,12 @@ import {
 } from "lucide-react";
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend,
+  
 } from "recharts";
 import { useTheme } from "next-themes";
 
@@ -68,7 +60,7 @@ interface PodCredit {
 
 export default function NodeDetail({ params }: { params: Promise<{ address: string }> }) {
   const { address } = use(params);
-  const decodedAddress = decodeURIComponent(address); // e.g. "173.212.207.32"
+  const decodedAddress = decodeURIComponent(address); //
 
   const [stats, setStats] = useState<NodeStats | null>(null);
   const [podData, setPodData] = useState<PodWithStats | null>(null);
@@ -82,6 +74,10 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
   const { theme, setTheme } = useTheme();
   const darkMode = theme === "dark";
+
+  const colorTheme = {
+    text: darkMode ? "text-zinc-300" : "text-black"
+  };
 
   const fetchData = async () => {
     try {
@@ -172,13 +168,23 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
   const cpuPercent = stats?.cpu_percent || 0;
   const ramPercent = stats ? ((stats.ram_used / stats.ram_total) * 100).toFixed(1) : "N/A";
-  const storageUsedGB = (podData.storage_used / 1e9).toFixed(2);
+  const storageUsedGB = (podData.storage_used / 1e9).toFixed(4);
   const storageCommittedGB = (podData.storage_committed / 1e9).toFixed(2);
-  const storagePercent = (podData.storage_usage_percent * 100).toFixed(4);
+  const storagePercent = (podData.storage_usage_percent * 100).toFixed(2);
 
 
   const uptimeDays = Math.floor(podData.uptime / 86400);
   const uptimeHours = Math.floor((podData.uptime % 86400) / 3600);
+
+  const formatStorage = (bytes: number): string => {
+  if (bytes === 0) return "0 B";
+
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  const value = (bytes / Math.pow(1024, i)).toFixed(2);
+
+  return `${value} ${sizes[i]}`;
+};
 
   const getHealthStatus = () => {
     if (cpuPercent > 90 || (stats && Number(ramPercent) > 90)) {
@@ -218,7 +224,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
 
   return (
-    <div className={`relative z-10 p-6 md:p-6 space-y-6 ${darkMode ? "text-white" : "text-black"}`}>
+    <div className={`relative z-10 p-6 md:p-6 space-y-6 ${colorTheme.text}`}>
       {/* Node Header */}
       <div className=" backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-zinc-800/50">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -227,7 +233,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <Server size={36} className="" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold font-space-grotesk mb-3 font-mono break-all">
+              <h1 className="text-xl md:text-xl font-bold font-space-grotesk mb-3 font-mono break-all">
                 {podData.address}  {/* ← Full address with port */}
               </h1>
               <div className="flex flex-wrap items-center gap-4">
@@ -275,7 +281,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               </div>
               <span className="text-sm font-medium colorTheme">CPU</span>
             </div>
-            <span className="text-3xl font-bold font-space-grotesk">
+            <span className="text-xl font-bold font-space-grotesk">
               {cpuPercent.toFixed(1)}<span className="text-lg colorTheme">%</span>
             </span>
           </div>
@@ -296,7 +302,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               </div>
               <span className="text-sm font-medium colorTheme">RAM</span>
             </div>
-            <span className="text-3xl font-bold font-space-grotesk">
+            <span className="text-xl font-bold font-space-grotesk">
               {ramPercent}<span className="text-lg colorTheme">%</span>
             </span>
           </div>
@@ -320,8 +326,8 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               </div>
               <span className="text-sm font-medium colorTheme">Storage</span>
             </div>
-            <span className="text-3xl font-bold font-space-grotesk">
-              {storageUsedGB} GB
+            <span className="text-xl font-bold font-space-grotesk">
+              {formatStorage(podData.storage_used)}
             </span>
           </div>
           <p className="text-sm colorTheme mt-3">
@@ -338,7 +344,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               </div>
               <span className="text-sm font-medium colorTheme">Uptime</span>
             </div>
-            <span className="text-3xl font-bold font-space-grotesk">
+            <span className="text-xl font-bold font-space-grotesk">
               {uptimeDays}<span className="text-lg colorTheme">d</span>
             </span>
           </div>
@@ -360,7 +366,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <TrendingDown size={18} className="" />
               <span className="text-sm colorTheme font-medium">Received</span>
             </div>
-            <p className="text-4xl font-bold font-space-grotesk ">
+            <p className="text-xl font-bold font-space-grotesk ">
               {stats ? stats.packets_received.toLocaleString() : "N/A"}
             </p>
             <p className="text-sm colorTheme mt-2">packets</p>
@@ -370,7 +376,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <TrendingUp size={18} className="" />
               <span className="text-sm colorTheme font-medium">Sent</span>
             </div>
-            <p className="text-4xl font-bold font-space-grotesk ">
+            <p className="text-xl font-bold font-space-grotesk ">
               {stats ? stats.packets_sent.toLocaleString() : "N/A"}
             </p>
             <p className="text-sm colorTheme mt-2">packets</p>
@@ -380,7 +386,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
               <Activity size={18} className="" />
               <span className="text-sm colorTheme font-medium">Active Streams</span>
             </div>
-            <p className="text-4xl font-bold font-space-grotesk ">
+            <p className="text-xl font-bold font-space-grotesk ">
               {stats ? stats.active_streams : "N/A"}
             </p>
             <p className="text-sm colorTheme mt-2">connections</p>
@@ -389,14 +395,21 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
       </div>
 
       {/* Pubkey & Additional Info */}
-      <div className=" backdrop-blur-xl w-1/2 rounded-2xl p-6 border border-zinc-800/50">
-        <h2 className="text-2xl font-bold font-space-grotesk ">
-          <span className="text-zinc-500">Public Key:</span> <span className="text-2xl md:text-2xl tracking-wider font-bold font-space-grotesk mb-3 font-mono break-all">{podData.pubkey}</span>
+      {/* <div className=" backdrop-blur-xl w-1/2 rounded-2xl p-6 border border-zinc-800/50">
+        <h2 className="text-md font-bold font-space-grotesk ">
+          <span className="text-zinc-500">Public Key:</span> <span className="text-md lg:text-md tracking-wider font-bold font-space-grotesk mb-3 font-mono break-all">{podData.pubkey}</span>
         </h2>
+      </div> */}
+      <div className="w-full max-w-full lg:w-2/6 backdrop-blur-xl rounded-2xl p-3 border border-zinc-800/50">
+      <h2 className="text-md font-bold font-space-grotesk">
+        <span className="text-zinc-500">Public Key:</span>
+        <span className="block mt-2 text-sm lg:text-md tracking-wider font-bold font-space-grotesk font-mono break-all">
+          {podData.pubkey}
+        </span>
+      </h2>
       </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* CPU & RAM Trend */}
           <div className=" backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50">
             <h3 className="text-lg font-bold font-space-grotesk mb-6">
               Storage Usage
@@ -457,5 +470,6 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         </div>
 
     </div>
+
   );
 }

@@ -22,10 +22,6 @@ export default function AboutPage() {
 
 
     useEffect(() => {
-        // const savedTheme = localStorage.getItem("colorTheme");
-        // if (savedTheme) {
-        //     setDarkMode(savedTheme === "dark");
-        // }
         setLoading(false);
     }, []);
 
@@ -48,7 +44,6 @@ export default function AboutPage() {
                 About Xandeum
             </h1>
 
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"> */}
             {/* What is Xandeum */}
             <div className={`group relative ${colorTheme.cardBg} backdrop-blur-xl rounded-2xl p-6 ${colorTheme.border} border hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 hover:-translate-y-1`}>
                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: `radial-gradient(circle at top right, #06b6d415, transparent 70%)` }}></div>
@@ -189,7 +184,7 @@ export default function AboutPage() {
                     </div>
                 </div>
             </div>
-            <div className="p-12 flex text-md text-center">
+            <div className="p-0 flex text-md text-center">
                 <p className="p-4 text-sm">
                     *For detailed instructions and troubleshooting, visit the official guide:
                 </p>
@@ -197,7 +192,7 @@ export default function AboutPage() {
                     href="https://docs.xandeum.network/xandeum-pnode-setup-guide"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="border px-2 py-4"
+                    className="border px-1 py-4"
                 >
                     Official pNode Setup Guide ↗
                 </a>

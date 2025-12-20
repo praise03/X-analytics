@@ -146,7 +146,7 @@ export default function LeaderboardPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 inconsolata" size={18} />
               <input
                 className="w-full rounded-full bg-zinc-900/50 pl-6 pr-8 py-2.5 text-sm border border-zinc-800/50 focus:border-cyan-500/50 focus:outline-none backdrop-blur-xl"
-                placeholder="Search by pubkey or IP"
+                placeholder="Search by Pubkey/IP"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

@@ -69,40 +69,13 @@ export default function AppLayout({ children }: AppLayoutProps) {
     <div className="relative min-h-screen">
       {/* Diagonal Split Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* <div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(150deg, ${
-              darkMode ? "#0f172a" : "#e8c594"
-            } 0%, ${
-              darkMode ? "#0f172a" : "#ffffff"
-            } 50%, ${
-              darkMode ? "#1e3a8a" : "#3b82f6"
-            } 50%, ${
-              darkMode ? "#1e3a8a" : "#0a103a"
-            } 100%)`,
-          }}
-        /> */}
-        {/* <div
-  className="absolute inset-0"
-  style={{
-    background: `linear-gradient(
-      135deg,
-      #0a0f2c 0%,
-      #1c2b4a 18%,
-      #3f6f6b 38%,
-      #7b5a54 55%,
-      #c98b4a 72%,
-      #e3b062 85%,
-    )`,
-  }}
-/> */}
+      
       </div>
 
       <div
         className={`flex min-h-screen  font-geist ${colorTheme.bg} relative overflow-hidden transition-colors duration-300`}>
 
-        <div className="fixed opacity-0 inset-0 pointer-events-none overflow-hidden">
+        <div className="fixed opacity-30 inset-0 pointer-events-none overflow-hidden">
 
           <div
             className={`absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-3xl ${darkMode ? "bg-cyan-500/10" : "bg-cyan-400/20"} animate-pulse`}
@@ -160,7 +133,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 href="https://www.coingecko.com/en/coins/xandeum"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2 bg-orange-500 hover:bg-orange-400 font-medium rounded-md transition shadow-lg shadow-orange-500/20"
+                className="px-6 sm:display-block py-2 bg-teal-700 mt-1 sm:mb-1 hover:bg-orange-400 sm:bg-green-100 font-medium rounded-md transition shadow-lg shadow-orange-500/20"
               >
                 Buy XAND
               </a>

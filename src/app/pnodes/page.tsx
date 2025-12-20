@@ -25,6 +25,7 @@ export default function PNodesPage() {
   const [publicFilter, setPublicFilter] = useState<"all" | "public" | "private">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingAuto, setLoadingAuto] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<"storage" | "uptime" | "last_seen" | "none">("none");
@@ -33,9 +34,13 @@ export default function PNodesPage() {
   const darkMode = theme === "dark";
   const nodesPerPage = 20;
 
-  const fetchPodsWithStats = async () => {
+  const fetchPodsWithStats = async (isRefresh = false) => {
     try {
-      setLoading(true);
+      if (!isRefresh) {
+        setLoading(true);
+      } else {
+        setLoadingAuto(true);
+      }
       const res = await fetch("/api/get-pods-with-stats", { method: "GET" });
       if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
@@ -47,21 +52,23 @@ export default function PNodesPage() {
       console.error("Error:", error);
     } finally {
       setLoading(false);
+      setLoadingAuto(false);
     }
   };
 
   useEffect(() => {
-    fetchPodsWithStats();
+    fetchPodsWithStats(false);
   }, []);
 
   useEffect(() => {
     if (autoRefresh) {
-      const interval = setInterval(fetchPodsWithStats, 20000);
+      const interval = setInterval(() => {
+        fetchPodsWithStats(true);
+      }, 5000);
       return () => clearInterval(interval);
     }
   }, [autoRefresh]);
 
-  // Enhanced search: address, version, uptime, storage %, last_seen
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredPods(podsWithStats);
@@ -153,18 +160,19 @@ export default function PNodesPage() {
 
   const colorTheme = {
     bg: darkMode ? "bg-transparent" : "bg-transparent",
-    text: darkMode ? "text-zinc-500" : "text-white",
+    text: darkMode ? "text-zinc-500" : "text-black",
     textCard: darkMode ? "text-white" : "text-black",
     textMuted: darkMode ? "text-zinc-500" : "text-black",
     border: darkMode ? "border-zinc-800/50" : "border-zinc-800/50",
     cardBg: darkMode ? "bg-transparent" : "bg-transparent",
+    bgIcon: darkMode ? "bg-gray-900/10" : "bg-zinc-200/40",
   };
 
   return (
     <div className="relative z-10 p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
         <div>
-          <h1 className={`text-4xl font-bold font-space-grotesk bg-gradient-to-r from-white to-zinc-400 bg-clip-text ${colorTheme.textCard}`}>
+          <h1 className={`text-2xl font-bold font-space-grotesk bg-gradient-to-r from-white to-zinc-400 bg-clip-text ${colorTheme.textCard}`}>
             All pNodes ({podsWithStats.length})
           </h1>
           <p className="text-zinc-500 mt-2">View and monitor every node in the network</p>
@@ -174,7 +182,7 @@ export default function PNodesPage() {
           <div className="relative flex-1 md:flex-initial">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
             <input
-              className={`w-full md:w-96 rounded-full ${colorTheme.textCard} bg-zinc-900/10 pl-11 pr-4 py-2.5 text-sm border border-zinc-800/50 focus:border-cyan-500/50 focus:outline-none backdrop-blur-xl`}
+              className={`w-full md:w-96 rounded-full ${colorTheme.textCard} bg-zinc-900/10 pl-11 pr-4 py-2.5 text-xs border border-zinc-800/50 focus:border-cyan-500/50 focus:outline-none backdrop-blur-xl`}
               placeholder="Search by IP Address"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -185,17 +193,17 @@ export default function PNodesPage() {
             className={`flex items-center gap-2 px-6 py-2.5 cursor-pointer ${colorTheme.textCard} rounded-full border ${autoRefresh ? "bg-cyan-500/10 border-cyan-500/50" : "border-zinc-800/50"} transition`}
           >
             <RefreshCw size={16} className={autoRefresh ? "animate-spin text-cyan-400" : "text-zinc-400"} />
-            <span className="text-sm">{autoRefresh ? "Auto On" : "Auto Off"}</span>
+            <span className="text-xs">{autoRefresh ? "Auto On" : "Auto Off"}</span>
           </button>
         </div>
       </div>
 
       {/* Sorting & Pagination */}
-      <div className="mb-8 space-y-6">
+      <div className="mb-4 space-y-6">
         {/* Sort & Filter Buttons */}
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm text-zinc-400 whitespace-nowrap">Sort by:</span>
+            <span className="text-xs text-zinc-400 whitespace-nowrap">Sort by:</span>
             <div className="flex flex-wrap gap-2">
               {(["storage", "uptime", "last_seen"] as const).map((key) => (
                 <button
@@ -209,7 +217,7 @@ export default function PNodesPage() {
                     }
                     setCurrentPage(1);
                   }}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition ${sortBy === key
+                  className={`px-4 py-2 rounded-xl cursor-pointer text-xs font-medium transition ${sortBy === key
                     ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-400"
                     : "bg-zinc-900/80 border-zinc-800/50 text-zinc-200 hover:text-white"
                     } border`}
@@ -221,7 +229,7 @@ export default function PNodesPage() {
 
               <button
                 onClick={() => setPublicFilter("public")}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition ${publicFilter === "public"
+                className={`px-4 py-2 rounded-xl cursor-pointer text-xs font-medium transition ${publicFilter === "public"
                   ? "bg-green-500/20 border-green-500/50 text-green-400"
                   : "bg-zinc-900/80 border-zinc-800/50 text-zinc-200 hover:text-white"
                   } border`}
@@ -230,7 +238,7 @@ export default function PNodesPage() {
               </button>
               <button
                 onClick={() => setPublicFilter("private")}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition ${publicFilter === "private"
+                className={`px-4 py-2 rounded-xl cursor-pointer text-xs font-medium transition ${publicFilter === "private"
                   ? "bg-orange-500/20 border-orange-500/50 text-orange-400"
                   : "bg-zinc-900/80 border-zinc-800/50 text-zinc-200 hover:text-white"
                   } border`}
@@ -243,7 +251,7 @@ export default function PNodesPage() {
                   setCurrentPage(1);
                   setPublicFilter("all");
                 }}
-                className="px-4 py-2 rounded-xl text-sm bg-zinc-700/20 border-zinc-900/50 text-white hover:text-white transition"
+                className="px-4 py-2 cursor-pointer rounded-xl text-xs bg-zinc-800/40 border-zinc-900/50 text-white hover:text-white transition"
               >
                 Clear
               </button>
@@ -253,7 +261,7 @@ export default function PNodesPage() {
 
         {/* Pagination – Centered on mobile, right-aligned on desktop */}
         <div className="flex justify-center md:justify-end items-center gap-3">
-          <span className="text-sm text-zinc-400">
+          <span className="text-xs text-zinc-400">
             Page {currentPage} of {Math.ceil(filteredPods.length / nodesPerPage)}
           </span>
           <div className={`flex ${colorTheme.textCard} gap-2`}>
@@ -303,12 +311,12 @@ export default function PNodesPage() {
                 <div className={`relative z-10> `}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-zinc-800/50 flex items-center justify-center group-hover:bg-cyan-500/10 transition">
+                      <div className={`w-10 h-10 rounded-xl ${colorTheme.bgIcon} flex items-center justify-center group-hover:bg-cyan-500/10 transition`}>
                         <Server size={20} className="text-cyan-400" />
                       </div>
                       {/* <div className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ backgroundColor: status.color }}></div> */}
                     </div>
-                    <span className={`text-xs px-3 py-1.5 bg-zinc-700/50 backdrop-blur-xl rounded-full ${colorTheme.text} font-mono}`}>
+                    <span className={`text-xs px-3 py-1.5 backdrop-blur-xl rounded-full ${colorTheme.bgIcon} ${colorTheme.text} font-mono}`}>
                       {pod.version}
                     </span>
                   </div>
@@ -323,21 +331,21 @@ export default function PNodesPage() {
                   </div>
 
                   <div className="space-y-2 mb-4">
-                    {/* <div className="flex justify-between text-sm">
+                    {/* <div className="flex justify-between text-xs">
                         <span className="text-zinc-500">Storage</span>
                         <span className="font-medium">{storagePercent}%</span>
                       </div>
                       <div className="w-full bg-gray-700/50 rounded-full h-1.5">
                         <div className="bg-white h-1.5 rounded-full transition-all" style={{ width: `${storagePercent}%` }} />
                       </div> */}
-                    <div className={`flex justify-between text-sm ${colorTheme.textMuted}`}>
+                    <div className={`flex justify-between text-xs ${colorTheme.textMuted}`}>
                       <span className="">Storage</span>
                       <span className="font-medium">
                         {formatBytes(pod.storage_used)} used of {formatBytes(pod.storage_committed)}
                       </span>
                     </div>
 
-                    <div className={`flex justify-between text-sm ${colorTheme.textMuted}`}>
+                    <div className={`flex justify-between text-xs ${colorTheme.textMuted}`}>
                       <span className="">Uptime</span>
                       <span className="font-medium">{uptimeDays} days</span>
                     </div>
@@ -348,8 +356,8 @@ export default function PNodesPage() {
 
                   <div className="pt-4 border-t border-zinc-800/50">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-500">Visibility</span>
-                      <span className="text-sm font-semibold" style={{ color: pod.is_public ? "green" : "brown" }}>
+                      <span className="text-xs text-zinc-500">Visibility</span>
+                      <span className="text-xs font-semibold" style={{ color: pod.is_public ? "green" : "brown" }}>
                         {pod.is_public ? "Public" : "Private"}
                       </span>
                     </div>
@@ -365,7 +373,7 @@ export default function PNodesPage() {
         <div className="flex flex-col items-center justify-center h-96 text-zinc-500">
           <Server size={64} className="opacity-50 mb-4" />
           <p className="text-lg">No nodes found</p>
-          <p className="text-sm mt-2">Try adjusting your search or filters</p>
+          <p className="text-xs mt-2">Try adjusting your search or filters</p>
         </div>
       )}
     </div>
