@@ -20,9 +20,10 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  
+
 } from "recharts";
 import { useTheme } from "next-themes";
+import { podsToCountry } from "@/app/data/podToCountries";
 
 
 interface NodeStats {
@@ -72,6 +73,8 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
   const [threshold, setThreshold] = useState<number>(0);
   const [totalPodsWithCredits, setTotalPodsWitCredits] = useState<number>(0);
 
+  const [country, setCountry] = useState<string>("");
+
   const { theme, setTheme } = useTheme();
   const darkMode = theme === "dark";
 
@@ -95,6 +98,10 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
       if (matchingPod) {
         setPodData(matchingPod);
+
+        const ip = matchingPod.address;
+        const nodeCountry = await getCountryFromIp(ip);
+        setCountry(nodeCountry);
       }
 
       //credits
@@ -142,6 +149,24 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
     }
   };
 
+  const getCountryFromIp = async (ip: string) => {
+    // 1. Check if any key in podsToCountry starts with this IP (followed by ":")
+
+    if (podsToCountry[ip]) {
+      return podsToCountry[ip];
+    }
+
+    // 2. Not found in hardcoded → fetch from ip-api.com
+    try {
+      const res = await fetch(`http://ip-api.com/json/${ip}?fields=country`);
+      if (!res.ok) return "Unknown";
+      const data = await res.json();
+      return data.country || "Unknown";
+    } catch {
+      return "Unknown";
+    }
+  };
+
 
   useEffect(() => {
     fetchData();
@@ -177,14 +202,14 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
   const uptimeHours = Math.floor((podData.uptime % 86400) / 3600);
 
   const formatStorage = (bytes: number): string => {
-  if (bytes === 0) return "0 B";
+    if (bytes === 0) return "0 B";
 
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  const value = (bytes / Math.pow(1024, i)).toFixed(2);
+    const sizes = ["B", "KB", "MB", "GB", "TB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const value = (bytes / Math.pow(1024, i)).toFixed(2);
 
-  return `${value} ${sizes[i]}`;
-};
+    return `${value} ${sizes[i]}`;
+  };
 
   const getHealthStatus = () => {
     if (cpuPercent > 90 || (stats && Number(ramPercent) > 90)) {
@@ -230,12 +255,13 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex items-start gap-5">
             <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-2xl border border-cyan-500/20">
-              <Server size={36} className="" />
+              <Server size={16} className="" />
             </div>
             <div>
-              <h1 className="text-xl md:text-xl font-bold font-space-grotesk mb-3 font-mono break-all">
+              <h1 className="text-xl md:text-xl font-bold font-space-grotesk  font-mono break-all">
                 {podData.address}  {/* ← Full address with port */}
               </h1>
+              <h1 className="text-xl md:text-lg font-bold font-space-grotesk mb-3 font-mono break-all">{country}</h1>
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2 px-3 py-1.5  rounded-lg border border-zinc-800/50 backdrop-blur-xl">
                   <StatusIcon size={16} style={{ color: healthStatus.color }} />
@@ -262,9 +288,9 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
           {!stats && (
             <div className="flex flex-wrap gap-2">
-              <span  className="px-3 py-1.5 flex text-sm rounded-full border border-zinc-800/50 font-medium backdrop-blur-xl">
-                  <AlertTriangle height={19} /> This pod doesn't make its stats public
-                </span>
+              <span className="px-3 py-1.5 flex text-xs rounded-full border border-zinc-800/50 font-medium backdrop-blur-xl">
+                <AlertTriangle height={10} className="mt-1" /> This pod doesn't make its stats public
+              </span>
             </div>
           )}
         </div>
@@ -276,8 +302,8 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         <div className="group  backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50 hover:border-cyan-500/50 transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
-                <Cpu size={24} className="" />
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                <Cpu size={18} className="" />
               </div>
               <span className="text-sm font-medium colorTheme">CPU</span>
             </div>
@@ -297,8 +323,8 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         <div className="group  backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50 hover:border-purple-500/50 transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                <RamIcon size={24} className="" />
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                <RamIcon size={18} className="" />
               </div>
               <span className="text-sm font-medium colorTheme">RAM</span>
             </div>
@@ -321,8 +347,8 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         <div className="group  backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50 hover:border-pink-500/50 transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center">
-                <HardDrive size={24} className="" />
+              <div className="w-9 h-9 rounded-xl bg-pink-500/10 flex items-center justify-center">
+                <HardDrive size={18} className="" />
               </div>
               <span className="text-sm font-medium colorTheme">Storage</span>
             </div>
@@ -339,8 +365,8 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         <div className="group  backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50 hover:border-amber-500/50 transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                <Clock size={24} className="" />
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                <Clock size={18} className="" />
               </div>
               <span className="text-sm font-medium colorTheme">Uptime</span>
             </div>
@@ -356,7 +382,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
 
       {/* Network Activity */}
       <div className=" backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50">
-        <h2 className="text-xl font-bold font-space-grotesk mb-6 flex items-center gap-3">
+        <h2 className="text-lg font-bold font-space-grotesk mb-6 flex items-center gap-3">
           <Activity size={24} className="" />
           Network Activity
         </h2>
@@ -401,40 +427,40 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
         </h2>
       </div> */}
       <div className="w-full max-w-full lg:w-2/6 backdrop-blur-xl rounded-2xl p-3 border border-zinc-800/50">
-      <h2 className="text-md font-bold font-space-grotesk">
-        <span className="text-zinc-500">Public Key:</span>
-        <span className="block mt-2 text-sm lg:text-md tracking-wider font-bold font-space-grotesk font-mono break-all">
-          {podData.pubkey}
-        </span>
-      </h2>
+        <h2 className="text-md font-bold font-space-grotesk">
+          <span className="text-zinc-500">Public Key:</span>
+          <span className="block mt-2 text-sm lg:text-md tracking-wider font-bold font-space-grotesk font-mono break-all">
+            {podData.pubkey}
+          </span>
+        </h2>
       </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className=" backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50">
-            <h3 className="text-lg font-bold font-space-grotesk mb-6">
-              Storage Usage
-            </h3>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart
-                data={[
-                  {
-                    name: "Network",
-                    committed: storageCommittedGB,
-                    used: storageUsedGB,
-                  },
-                ]}
-                layout="horizontal"
-              >
-                <XAxis type="category" hide />
-                <YAxis type="number" domain={[0, Number(storageCommittedGB) * 1.1]} />
-                <Tooltip />
-                <Bar dataKey="committed" stackId="a" fill="#8b5cf6" radius={[8, 0, 0, 8]} animationDuration={1200} />
-                <Bar dataKey="used" stackId="a" fill="#ec4899" radius={[0, 8, 8, 0]} animationDuration={1200} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className=" backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50">
+          <h3 className="text-lg font-bold font-space-grotesk mb-6">
+            Storage Usage
+          </h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart
+              data={[
+                {
+                  name: "Network",
+                  committed: storageCommittedGB,
+                  used: storageUsedGB,
+                },
+              ]}
+              layout="horizontal"
+            >
+              <XAxis type="category" hide />
+              <YAxis type="number" domain={[0, Number(storageCommittedGB) * 1.1]} />
+              <Tooltip />
+              <Bar dataKey="committed" stackId="a" fill="#8b5cf6" radius={[8, 0, 0, 8]} animationDuration={1200} />
+              <Bar dataKey="used" stackId="a" fill="#ec4899" radius={[0, 8, 8, 0]} animationDuration={1200} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-          <div className="backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50">
+        <div className="backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50">
           <h2 className="text-xl font-bold font-space-grotesk mb-6">
             Credits & Ranking
           </h2>
@@ -467,7 +493,7 @@ export default function NodeDetail({ params }: { params: Promise<{ address: stri
             </div>
           </div>
         </div>
-        </div>
+      </div>
 
     </div>
 

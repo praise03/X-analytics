@@ -133,7 +133,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 href="https://www.coingecko.com/en/coins/xandeum"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 sm:display-block py-2 bg-teal-700 mt-1 sm:mb-1 hover:bg-orange-400 sm:bg-green-100 font-medium rounded-md transition shadow-lg shadow-orange-500/20"
+                className={`px-6 sm:display-block py-2 bg-teal-200 mt-1 sm:mb-1 hover:bg-orange-200 sm:bg-green-200 ${colorTheme.textMuted} font-medium rounded-md transition shadow-lg shadow-orange-500/20`}
               >
                 Buy XAND
               </a>
