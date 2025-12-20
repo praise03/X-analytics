@@ -30,10 +30,10 @@ export default function CountryMap({ countryDistribution }: CountryMapProps) {
     .slice(0, 5);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       {/* Map – takes most space */}
       <div className="lg:col-span-8 bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-6 border border-zinc-800/50 overflow-hidden">
-        <h3 className="text-xl font-bold mb-6 ">Geographical Distribution</h3>
+        <h3 className="text-lg font-bold mb-6 ">Geographical Distribution</h3>
         <div className="relative -mx-6 -mb-6">
           <ComposableMap projection="geoMercator" className="w-full">
             <ZoomableGroup zoom={1}>
@@ -93,15 +93,15 @@ export default function CountryMap({ countryDistribution }: CountryMapProps) {
       {/* Top 5 – fixed width, scrollable if needed */}
       <div className="lg:col-span-4">
         <div className="bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 border border-zinc-800/50 h-full flex flex-col">
-          <h3 className="text-lg font-bold mb-6">Top 5 Locations</h3>
+          <h3 className="text-md font-bold mb-6">Top 5 Locations</h3>
           <div className="space-y-4 flex-1 overflow-y-auto">
             {topCountries.map(([country, count], i) => (
               <div key={country} className="flex items-center justify-between p-2 bg-zinc-900/50 rounded-xl border border-zinc-800/50">
                 <div className="flex items-center gap-3">
-                  <span className="text-md font-bold text-orange-400">{i + 1}</span>
-                  <span className="text-base text-md">{country}</span>
+                  <span className="text-xs font-bold text-orange-400">{i + 1}</span>
+                  <span className="text-base text-xs">{country}</span>
                 </div>
-                <span className="font-bold text-lg">{count}</span>
+                <span className="font-bold text-sm">{count}</span>
               </div>
             ))}
           </div>

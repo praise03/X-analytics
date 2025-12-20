@@ -248,7 +248,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-cyan-500/20 to-transparent"></div>
             <div className="relative z-10">
-              <Server size={28} className=" mb-3" />
+              <Server size={15} className=" mb-3" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Total pNodes</p>
               <p className="text-lg font-bold mt-2">{aggregatedStats.totalNodes}</p>
             </div>
@@ -258,7 +258,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-green-500/20 to-transparent"></div>
             <div className="relative z-10">
-              <Activity size={28} className=" mb-3 animate-pulse" />
+              <Activity size={15} className=" mb-3 animate-pulse" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Online</p>
               <p className="text-lg font-bold mt-2">{aggregatedStats.onlineNodes}</p>
               <p className="text-xs  mt-1">
@@ -273,7 +273,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-purple-500/20 to-transparent"></div>
             <div className="relative z-10">
-              <Database size={28} className=" mb-3" />
+              <Database size={15} className=" mb-3" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Committed Storage</p>
               <p className="text-lg font-bold mt-2">{aggregatedStats.totalStorageCommittedTB} TB</p>
             </div>
@@ -283,7 +283,7 @@ export default function Dashboard() {
           <div className={`relative ${colorTheme.cardBg} backdrop-blur-xl rounded-md p-6 ${colorTheme.border} border overflow-hidden`}>
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-amber-500/20 to-transparent"></div>
             <div className="relative z-10">
-              <Clock size={28} className=" mb-3" />
+              <Clock size={15} className=" mb-3" />
               <p className={`text-sm ${colorTheme.textMuted}`}>Avg Uptime</p>
               <p className="text-lg font-bold mt-2">{aggregatedStats.averageUptimeDays} days</p>
             </div>
@@ -349,25 +349,6 @@ export default function Dashboard() {
                     <Cell fill="#b62323ff" />
                   </Pie>
 
-                  {/* Add labels with proper contrast */}
-                  {/* <Pie
-                    data={[
-                      { name: "Online", value: aggregatedStats.onlineNodes },
-                      { name: "Offline", value: aggregatedStats.totalNodes - aggregatedStats.onlineNodes },
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={140}
-                    outerRadius={160}
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ${value}`}
-                    labelLine={false}
-                    fill="none"
-                  >
-                    <Cell fill="transparent" />
-                    <Cell fill="transparent" />
-                  </Pie> */}
-
                   {/* Custom label styling */}
                   <text x="50%" y="45%" textAnchor="middle" className="text-3xl font-bold fill-current">
                     {aggregatedStats.onlineNodes}
@@ -388,7 +369,7 @@ export default function Dashboard() {
                     labelStyle={{ color: darkMode ? "#fff" : "#fff" }}
                   />
 
-                  <Legend className="p-5" />
+                  <Legend className="p-4" />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -489,7 +470,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <p className={`text-center text-sm ${colorTheme.textMuted} mt-4`}>
-                Only {(aggregatedStats.totalStorageUsedGB / (aggregatedStats.totalStorageCommittedTB * 1000) * 100).toFixed(2)}% of committed storage currently used
+                Only {(aggregatedStats.totalStorageUsedGB / (aggregatedStats.totalStorageCommittedTB * 1000) * 100).toFixed(4)}% of committed storage currently used
               </p>
             </div>
           </div>
