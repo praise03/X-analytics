@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 import fetch from 'node-fetch';
 
-const RPC_URL = 'http://192.190.136.28:6000/rpc'; // change if needed
+const RPC_URL = 'http://154.38.170.117:6000/rpc'; // change if needed
 
 export async function GET() {
   const payload = {
